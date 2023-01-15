@@ -7,6 +7,14 @@ const cameraBtn = document.getElementById("camera");
 const camerasSelect = document.getElementById("cameras");
 const call = document.getElementById("call");
 const room = document.getElementById("room");
+const myStreamForm = document.getElementById("#myStream");
+// Welcome Form (join a room)
+
+const welcome = document.getElementById("welcome");
+const welcomeForm = welcome.querySelector("form");
+const nameForm = document.getElementById("name");
+const nameFormForm = nameForm.querySelector("form");
+const msgForm = room.querySelector("form");
 
 call.hidden = true;
 
@@ -96,16 +104,20 @@ async function handleCameraChange() {
 
 function handleMessageSubmit(event){
   event.preventDefault();
-  const input = room.querySelector("#msg input");
+  const input = msgForm.querySelector("input");
+  const msgContent = input.value;
   socket.emit("new_message", input.value, roomName, () => {
-    addMessage(`You: ${input.value}`);
+    addMessage(`You: ${msgContent}`);
   })
   input.value="";
 }
 
 function handleNicknameSubmit(event){
   event.preventDefault();
-  const input = room.querySelector("#name input");
+  nameFormForm.hidden=true;
+  const input = nameFormForm.querySelector("input");
+  const h3 = nameForm.querySelector("h3");
+  h3.innerText = `${input.value} Welcome!`;
   socket.emit("nickname", input.value);
 }
 
@@ -113,22 +125,17 @@ muteBtn.addEventListener("click", handleMuteClick);
 cameraBtn.addEventListener("click", handleCameraClick);
 camerasSelect.addEventListener("input", handleCameraChange);
 
-// Welcome Form (join a room)
-
-const welcome = document.getElementById("welcome");
-const welcomeForm = welcome.querySelector("form");
 
 window.onload = function(){
-const roomForm = room.querySelector("#init");
-const nameForm = room.querySelector("#name");
-
-
-roomForm.addEventListener("submit", handleMessageSubmit);
 nameForm.addEventListener("submit", handleNicknameSubmit);
+msgForm.addEventListener("submit", handleMessageSubmit);
 };
 async function initCall() {
   welcome.hidden = true;
   call.hidden = false;
+  nameForm.hidden = true;
+  const h3 = room.querySelector("h3");
+  h3.innerText = `Room ${roomName}`;
   await getMedia();
   makeConnection();
 }
@@ -136,9 +143,9 @@ async function initCall() {
 async function handleWelcomeSubmit(event) {
   event.preventDefault();
   const input = welcomeForm.querySelector("input");
+  roomName = input.value;
   await initCall();
   socket.emit("join_room", input.value);
-  roomName = input.value;
   input.value = "";
 }
 

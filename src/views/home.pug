@@ -11,6 +11,12 @@ html(lang="en")
         header
             h1 Noom
         main
+            div#name
+                h3 
+                ul 
+                form#nick_name
+                    input(placeholder="nickname", required, type="text")
+                    button Save
             div#welcome
                 form#init    
                     input(placeholder="room name", required, type="text")
@@ -23,11 +29,8 @@ html(lang="en")
                     select#cameras
                     video#peerFace(autoplay,playsinline, width="400", height="400")
                 div#room
-                    h3 
+                    h3
                     ul 
-                    form#name
-                        input(placeholder="message", required, type="text")
-                        button Save
                     form#msg
                         input(placeholder="message", required, type="text")
                         button Send
