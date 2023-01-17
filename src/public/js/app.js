@@ -16,7 +16,13 @@ const nameForm = document.getElementById("name");
 const nameFormForm = nameForm.querySelector("form");
 const msgForm = room.querySelector("form");
 
+//login_Form
+const login = document.getElementById("classRoom");
+const loginBtn = document.getElementById("login");
+
 call.hidden = true;
+nameForm.hidden = true;
+welcome.hidden = true;
 
 let myStream;
 let muted = false;
@@ -90,6 +96,12 @@ function handleCameraClick() {
     cameraOff = true;
   }
 }
+function handleLoginClick() {
+  event.preventDefault();
+  nameForm.hidden = false;
+  welcome.hidden = false;
+  login.hidden = true;
+}
 
 async function handleCameraChange() {
   await getMedia(camerasSelect.value);
@@ -124,7 +136,7 @@ function handleNicknameSubmit(event){
 muteBtn.addEventListener("click", handleMuteClick);
 cameraBtn.addEventListener("click", handleCameraClick);
 camerasSelect.addEventListener("input", handleCameraChange);
-
+loginBtn.addEventListener("click",handleLoginClick);
 
 window.onload = function(){
 nameForm.addEventListener("submit", handleNicknameSubmit);
