@@ -29,8 +29,12 @@ const height = canvas.height;
 //backImg
 let backImg = new Image();
 backImg.src = "C:\Users\kaeun\ossp\src\public\js\class.webp";
-
-
+let stuImg = new Image();
+stuImg.src = "https://e1.pngegg.com/pngimages/26/201/png-clipart-pucca-girl-cartoon-character-thumbnail.png";
+/*stuImg.onload = function(event){
+  event.preventDefault();
+  ctx.drawImage(stuImg, 0, 0, 200, 250);
+};*/
 const tankWidth = 10;
 const tankHeight = 10;
 let tankX = 0;
@@ -66,10 +70,11 @@ const drawTank = () => {
   ctx.lineCap = "round";
   ctx.beginPath();
   ctx.moveTo(tankX, tankUx);
-  ctx.lineTo(tankX + tankWidth, tankUx);
+  /*ctx.lineTo(tankX + tankWidth, tankUx);
   ctx.lineTo(tankX + tankWidth, tankUx + tankHeight);
   ctx.lineTo(tankX, tankUx + tankHeight);
-  ctx.fill();
+  ctx.fill();*/
+  ctx.drawImage(stuImg, tankX, tankUx, 25, 40);
   ctx.stroke();
   ctx.closePath();
 }
@@ -106,11 +111,6 @@ const keyupHandler = event => {
 const start = setInterval(draw, 10);
 document.addEventListener("keydown", keydownHandler, false);
 document.addEventListener("keyup", keyupHandler, false);
-
-backImg.onload = function(){
-  ctx.drawImage(backImg,0,0);
-  draw();
-}
 
 //login
 call.hidden = true;
@@ -270,8 +270,11 @@ const checkMissile = () => {
     tankUx >= 96 &&
     tankUx <= 100
   ) {
-    confirm("명중입니다. 다시 하시겠습니까?");
-    handleLoginClick();
+    if(confirm("자리에 앉았습니다. 입장하실 건가요?")){
+      nameForm.hidden = false;
+      welcome.hidden = false;
+      login.hidden = true;
+    }
   }
 }
 
