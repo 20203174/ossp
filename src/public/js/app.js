@@ -20,6 +20,85 @@ const msgForm = room.querySelector("form");
 const login = document.getElementById("classRoom");
 const loginBtn = document.getElementById("login");
 
+//canvas
+const canvas = document.getElementById("mainCanvas");
+const ctx = canvas.getContext("2d");
+const width = canvas.width;
+const height = canvas.height;
+const tankWidth = 10;
+const tankHeight = 10;
+let tankX = 0;
+let tankUx = 0;
+const tankDx = 3;
+let tankLeftPressed = false;
+let tankRightPressed = false;
+let tankUpPressed = false;
+let tankDownPressed = false;
+
+const draw = () => {
+  ctx.clearRect(0, 0, width, height);
+  if (tankLeftPressed && tankX > 0) {
+    tankX -= tankDx;
+  }
+  if (tankRightPressed && tankX + tankWidth < width) {
+    tankX += tankDx;
+  }
+  if (tankDownPressed && tankUx + tankHeight < height) {
+    tankUx += tankDx;
+  }
+  if (tankUpPressed && tankUx > 0) {
+    tankUx -= tankDx;
+  }
+
+  drawTank();
+  drawTarget();
+  drawMissile();
+}
+const drawTank = () => {
+  ctx.lineWidth = 3;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(tankX, tankUx);
+  ctx.lineTo(tankX + tankWidth, tankUx);
+  ctx.lineTo(tankX + tankWidth, tankUx + tankHeight);
+  ctx.lineTo(tankX, tankUx + tankHeight);
+  ctx.fill();
+  ctx.stroke();
+  ctx.closePath();
+}
+const drawTarget = () => {}
+const drawMissile = () => {}
+
+const keydownHandler = event => {
+  if (event.keyCode === 37) {
+    tankLeftPressed = true;
+  } else if (event.keyCode === 39) {
+    tankRightPressed = true;
+  }  else if (event.keyCode == 38){
+    tankUpPressed = true;
+  } else if (event.keyCode == 40){
+    tankDownPressed = true;
+  }
+};
+const keyupHandler = event => {
+  if (event.keyCode === 37) {
+    tankLeftPressed = false;
+  } else if (event.keyCode === 39) {
+    tankRightPressed = false;
+  }  else if (event.keyCode == 38){
+    tankUpPressed = false;
+  } else if (event.keyCode == 40){
+    tankDownPressed = false;
+  }
+};
+const start = setInterval(draw, 10);
+document.addEventListener("keydown", keydownHandler, false);
+document.addEventListener("keyup", keyupHandler, false);
+
+draw();
+
+
+//login
 call.hidden = true;
 nameForm.hidden = true;
 welcome.hidden = true;
@@ -96,7 +175,7 @@ function handleCameraClick() {
     cameraOff = true;
   }
 }
-function handleLoginClick() {
+function handleLoginClick(event) {
   event.preventDefault();
   nameForm.hidden = false;
   welcome.hidden = false;
