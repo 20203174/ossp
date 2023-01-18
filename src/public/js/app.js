@@ -23,12 +23,18 @@ const loginBtn = document.getElementById("login");
 //canvas
 const canvas = document.getElementById("mainCanvas");
 const ctx = canvas.getContext("2d");
+
 const width = canvas.width;
 const height = canvas.height;
+//backImg
+let backImg = new Image();
+backImg.src = "C:\Users\kaeun\ossp\src\public\js\class.webp";
+
+
 const tankWidth = 10;
 const tankHeight = 10;
 let tankX = 0;
-let tankUx = 0;
+let tankUx = 100;
 const tankDx = 3;
 let tankLeftPressed = false;
 let tankRightPressed = false;
@@ -49,11 +55,12 @@ const draw = () => {
   if (tankUpPressed && tankUx > 0) {
     tankUx -= tankDx;
   }
-
+  checkMissile();
   drawTank();
   drawTarget();
   drawMissile();
 }
+
 const drawTank = () => {
   ctx.lineWidth = 3;
   ctx.lineCap = "round";
@@ -66,7 +73,12 @@ const drawTank = () => {
   ctx.stroke();
   ctx.closePath();
 }
-const drawTarget = () => {}
+const drawTarget = () => {
+  ctx.beginPath();
+  ctx.arc(153.5,98,6,0,Math.PI*2);
+  ctx.fillStyle="black";
+  ctx.stroke();
+}
 const drawMissile = () => {}
 
 const keydownHandler = event => {
@@ -95,8 +107,10 @@ const start = setInterval(draw, 10);
 document.addEventListener("keydown", keydownHandler, false);
 document.addEventListener("keyup", keyupHandler, false);
 
-draw();
-
+backImg.onload = function(){
+  ctx.drawImage(backImg,0,0);
+  draw();
+}
 
 //login
 call.hidden = true;
@@ -248,6 +262,18 @@ function addMessage(message){
 }
 
 welcomeForm.addEventListener("submit", handleWelcomeSubmit);
+const checkMissile = () => {
+  // target 명중
+  if (
+    tankX >= 152 &&
+    tankX <= 156 &&
+    tankUx >= 96 &&
+    tankUx <= 100
+  ) {
+    confirm("명중입니다. 다시 하시겠습니까?");
+    handleLoginClick();
+  }
+}
 
 // Socket Code
 
